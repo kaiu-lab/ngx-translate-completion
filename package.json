@@ -1,0 +1,13 @@
+{
+  "name": "@kaiu/ngx-translate-completion",
+  "version": "0.1.0",
+  "description": "CLI tool to report translation completion",
+  "main": "index.js",
+  "scripts": {},
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "colors": "^1.3.0",
+    "commander": "^2.16.0"
+  }
+}
