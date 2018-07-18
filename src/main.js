@@ -1,3 +1,4 @@
+#!/usr/bin/env node
 const Report = require('./report').Report;
 const tools = require('./tools');
 const colors = require('colors');
