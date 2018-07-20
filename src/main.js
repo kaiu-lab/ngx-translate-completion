@@ -49,6 +49,8 @@ const report = new Report();
 let otherTranslations = allTranslations
     .filter(translation => translation.language !== program.language);
 
+const defaultTranslationContent = allTranslations.find(translation => translation.language === program.language).content;
+
 let markdown = '# Translation completion report\n\n';
 
 Object.keys(categories)
@@ -91,6 +93,7 @@ let mdCategoriesSeparationRow = [' :--- '].concat(otherTranslations.map(() => ' 
 let mdCategoriesCompletionRow = '';
 
 
+// Prepare array for completion display per category.
 Object.keys(categories).forEach(category => {
     const tableRow = {};
     tableRow[category] = [];
@@ -103,11 +106,25 @@ Object.keys(categories).forEach(category => {
     table.push(tableRow);
     mdCategoriesCompletionRow += '\n';
 });
-console.log(table.toString());
 
 markdown += '\n\n';
 markdown += `${mdCategoriesTableHeader}\n`;
 markdown += `${mdCategoriesSeparationRow}\n`;
 markdown += `${mdCategoriesCompletionRow}\n`;
+
+
+// Prepare the list of missing keys (markdown only)
+markdown += '## Detailed report\n';
+otherTranslations.forEach(translation => {
+    markdown += `### ${translation.language} : \n\n`;
+    const missingTranslations = report.getMissingKeys(translation.language, defaultTranslationContent);
+    missingTranslations.forEach(missingTranslation => {
+        markdown += ` * \`${missingTranslation.key}\` : \`${missingTranslation.value}\`\n`;
+    });
+    markdown += '\n\n';
+});
+
+
+console.log(table.toString());
 
 fs.writeFileSync(program.output, markdown);

@@ -1,3 +1,5 @@
+const tools = require("./tools");
+
 function Report() {
     this.global = [];
     this.languages = {};
@@ -40,6 +42,24 @@ function Report() {
                 return currentKeyDone ? ++amountDone : amountDone;
             }, 0) / languageKeys.length;
     };
+
+    this.getMissingKeys = function (language, defaultLanguageObject) {
+        const missing = [];
+        const categoryKeys = Object.keys(this.languages[language]);
+        categoryKeys.forEach(categoryKey => {
+            const languageKeys = Object.keys(this.languages[language][categoryKey]);
+            languageKeys
+                .filter(key => !this.languages[language][categoryKey][key])
+                .forEach(key => {
+                    const translationKey = categoryKey === 'UNCATEGORIZED' ? key : `${categoryKey}.${key}`;
+                    missing.push({
+                        key: translationKey,
+                        value: tools.getTranslation(defaultLanguageObject, translationKey)
+                    });
+                })
+        });
+        return missing;
+    }
 }
 
 module.exports.Report = Report;

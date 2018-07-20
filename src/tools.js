@@ -21,25 +21,30 @@ function addToCategory(categories, categoryName, key) {
 }
 
 function hasTranslation(content, key) {
-    // If the content is undefined, return false as we tried to check inside nan undefined object,
+    return getTranslation(content, key) !== undefined;
+}
+
+function getTranslation(content, key) {
+    // If the content is undefined, return undefined as we tried to check inside an undefined object,
     // so the whole category doesn't exist
     if (content === undefined) {
-        return false;
+        return undefined;
     }
-    // If the flatten key exists, return true directly.
+    // If the flatten key exists, return it directly.
     if (content[key] !== undefined) {
-        return true;
+        return content[key];
     }
     const firstDot = key.indexOf('.');
     const keyFragmentName = key.substr(0, firstDot);
     const keyPropertyName = key.substr(firstDot + 1);
     // If there's no more property name, then it means that the key doesn't exist at all.
     if (keyPropertyName === '') {
-        return false;
+        return undefined;
     }
-    return hasTranslation(content[keyFragmentName], keyPropertyName);
+    return getTranslation(content[keyFragmentName], keyPropertyName);
 }
 
 module.exports.parseObject = parseObject;
 module.exports.addToCategory = addToCategory;
 module.exports.hasTranslation = hasTranslation;
+module.exports.getTranslation = getTranslation;
