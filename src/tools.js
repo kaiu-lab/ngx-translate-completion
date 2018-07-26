@@ -6,7 +6,7 @@ function parseObject(categories, obj, categoryName, baseName = '') {
                 addToCategory(categories, categoryName, `${baseName}${key}`);
             } else {
                 // Else, recursion !
-                parseObject(categories, obj[key], categoryName, `${key}.`);
+                parseObject(categories, obj[key], categoryName, `${baseName}${key}.`);
             }
         })
 }
